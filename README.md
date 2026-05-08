@@ -1,7 +1,7 @@
 # 拾光
 
 <p align="center">
-  <img src="AppIcon-gradient.svg" width="120" alt="拾光图标">
+  <img src="logo.webp" width="120" alt="拾光图标">
 </p>
 
 拾光是一款 macOS 菜单栏小工具，用来通过键盘亮度按键直接调节外接显示器的硬件亮度。
