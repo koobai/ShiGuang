@@ -1,0 +1,104 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build macOS app
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      - name: Resolve version
+        run: |
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            VERSION="${GITHUB_REF_NAME#v}"
+          else
+            VERSION="$(awk -F '= ' '/MARKETING_VERSION = / { gsub(/[ ;]/, "", $2); print $2; exit }' ShiGuang.xcodeproj/project.pbxproj)"
+            if [[ -z "${VERSION}" ]]; then
+              VERSION="dev-${GITHUB_SHA::7}"
+            fi
+          fi
+
+          echo "VERSION=${VERSION}" >> "${GITHUB_ENV}"
+          echo "DMG_NAME=ShiGuang-${VERSION}.dmg" >> "${GITHUB_ENV}"
+
+      - name: Build Release app
+        run: |
+          xcodebuild \
+            -project ShiGuang.xcodeproj \
+            -scheme ShiGuang \
+            -configuration Release \
+            -derivedDataPath build/DerivedData \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            build
+
+      - name: Create DMG
+        run: |
+          APP_PATH="build/DerivedData/Build/Products/Release/拾光.app"
+          STAGING_DIR="build/dmg-root"
+          DIST_DIR="dist"
+
+          test -d "${APP_PATH}"
+
+          rm -rf "${STAGING_DIR}" "${DIST_DIR}"
+          mkdir -p "${STAGING_DIR}" "${DIST_DIR}"
+
+          ditto "${APP_PATH}" "${STAGING_DIR}/拾光.app"
+          ln -s /Applications "${STAGING_DIR}/Applications"
+
+          hdiutil create \
+            -volname "拾光 ${VERSION}" \
+            -srcfolder "${STAGING_DIR}" \
+            -ov \
+            -format UDZO \
+            "${DIST_DIR}/${DMG_NAME}"
+
+          shasum -a 256 "${DIST_DIR}/${DMG_NAME}" > "${DIST_DIR}/${DMG_NAME}.sha256"
+
+      - name: Upload DMG artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.DMG_NAME }}
+          path: |
+            dist/${{ env.DMG_NAME }}
+            dist/${{ env.DMG_NAME }}.sha256
+
+      - name: Prepare release notes
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          awk -v version="${VERSION}" '
+            $0 == "## " version { capture = 1; next }
+            capture && /^## / { exit }
+            capture { print }
+          ' CHANGELOG.md > release-notes.md
+
+          if [[ ! -s release-notes.md ]]; then
+            echo "拾光 ${VERSION}" > release-notes.md
+          fi
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            "dist/${DMG_NAME}" \
+            "dist/${DMG_NAME}.sha256" \
+            --title "拾光 ${VERSION}" \
+            --notes-file release-notes.md
