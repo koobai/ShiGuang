@@ -1,12 +1,14 @@
-[English](README.md) | [简体中文](README.zh-CN.md)
-
-# ShiGuang
-
 <p align="center">
   <img src="logo.webp" width="120" alt="ShiGuang logo">
 </p>
 
-ShiGuang is a macOS menu bar utility that lets you adjust the hardware brightness of an external display using the keyboard brightness keys.
+<h1 align="center">ShiGuang</h1>
+
+<p align="center">A lightweight macOS menu bar utility for external display brightness.</p>
+
+<p align="center">
+  <a href="README.md">English</a> | <a href="README.zh-CN.md">简体中文</a>
+</p>
 
 <p align="center">
   <img src="app.webp" width="720" alt="ShiGuang screenshot">

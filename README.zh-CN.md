@@ -1,12 +1,14 @@
-[English](README.md) | [简体中文](README.zh-CN.md)
-
-# 拾光
-
 <p align="center">
   <img src="logo.webp" width="120" alt="拾光图标">
 </p>
 
-拾光是一款 macOS 菜单栏小工具，通过键盘亮度按键直接调节外接显示器的硬件亮度。
+<h1 align="center">拾光</h1>
+
+<p align="center">轻量的 macOS 外接显示器亮度调节菜单栏工具。</p>
+
+<p align="center">
+  <a href="README.md">English</a> | <a href="README.zh-CN.md">简体中文</a>
+</p>
 
 <p align="center">
   <img src="app.webp" width="720" alt="拾光界面截图">
