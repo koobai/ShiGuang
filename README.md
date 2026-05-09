@@ -87,7 +87,7 @@ This tool is updated around personal use and is primarily built for the author's
 
 ## Changelog
 
-See [CHANGELOG.md](CHANGELOG.md). The release notes are currently maintained in Chinese.
+See [CHANGELOG.md](CHANGELOG.md).
 
 ## Build
 

@@ -1,5 +1,13 @@
 # Changelog / 更新日志
 
+## 0.1.1
+
+- Localize the app display name by system language
+- Show `ShiGuang` on English systems and `拾光` on Simplified Chinese systems
+
+- 根据系统语言本地化应用显示名称
+- 英文系统显示 `ShiGuang`，简体中文系统显示 `拾光`
+
 ## 0.1.0
 
 - Adjust external display hardware brightness with the keyboard brightness up and down keys
