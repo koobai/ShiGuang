@@ -4,7 +4,7 @@
 
 <h1 align="center">ShiGuang</h1>
 
-<p align="center">A lightweight macOS menu bar utility for external display brightness.</p>
+<p align="center">A lightweight macOS menu bar utility for external display brightness control.</p>
 
 <p align="center">
   <a href="README.md">English</a> | <a href="README.zh-CN.md">简体中文</a>
