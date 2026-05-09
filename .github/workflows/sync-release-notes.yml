@@ -1,0 +1,49 @@
+name: Sync Release Notes
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to sync, for example v0.1.0
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    name: Sync GitHub release notes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve version
+        run: |
+          TAG="${{ inputs.tag }}"
+          VERSION="${TAG#v}"
+          echo "TAG=${TAG}" >> "${GITHUB_ENV}"
+          echo "VERSION=${VERSION}" >> "${GITHUB_ENV}"
+
+      - name: Prepare release notes
+        run: |
+          awk -v version="${VERSION}" '
+            $0 == "## " version { capture = 1; next }
+            capture && /^## / { exit }
+            capture { print }
+          ' CHANGELOG.md > release-notes.md
+
+          if [[ ! -s release-notes.md ]]; then
+            echo "No matching section found in CHANGELOG.md for ${VERSION}" >&2
+            exit 1
+          fi
+
+      - name: Update GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release edit "${TAG}" \
+            --title "拾光 ${VERSION}" \
+            --notes-file release-notes.md
