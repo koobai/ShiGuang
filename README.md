@@ -1,87 +1,110 @@
-# 拾光
+[English](README.md) | [简体中文](README.zh-CN.md)
+
+# ShiGuang
 
 <p align="center">
-  <img src="logo.webp" width="120" alt="拾光图标">
+  <img src="logo.webp" width="120" alt="ShiGuang logo">
 </p>
 
-拾光是一款 macOS 菜单栏小工具，用来通过键盘亮度按键直接调节外接显示器的硬件亮度。
+ShiGuang is a macOS menu bar utility that lets you adjust the hardware brightness of an external display using the keyboard brightness keys.
 
 <p align="center">
-  <img src="app.webp" width="720" alt="拾光界面截图">
+  <img src="app.webp" width="720" alt="ShiGuang screenshot">
 </p>
 
-目前项目主要在以下环境中开发和测试：
+This project is currently developed and tested mainly in the following environment:
 
-- 运行设备：Mac mini M4
-- 显示器：Redmi G27U
-- 系统：macOS
+- Device: Mac mini M4
+- Display: Redmi G27U
+- System: macOS 26.4.1
 
-其他 Mac 型号、其他外接显示器和其他连接方式暂未完整测试。如果你的显示器不支持 DDC/CI，或者 macOS 无法通过当前接口访问显示器亮度，拾光可能无法正常工作。
+Other Mac models, external displays, and connection methods have not been fully tested yet. If your display does not support DDC/CI, or macOS cannot access display brightness through the current interface, ShiGuang may not work as expected.
 
-## 功能特性
+## Features
 
-- 使用键盘亮度增加/降低按键调节外接显示器亮度
-- 每次按键按 5% 步进调整亮度
-- 调整时自动显示当前亮度百分比
-- 常驻 macOS 菜单栏，不占用 Dock
-- 菜单栏图标显示为系统太阳图标
-- 点击菜单栏图标可查看当前亮度
-- 支持通过菜单中的滑块手动调节亮度
-- 菜单中提供快速退出按钮
-- 自动记住上次亮度，并在下次启动时尝试恢复
-- 显示器或系统唤醒后会重置连接状态，提升后续控制成功率
-- 基于 DDC/CI 控制显示器硬件亮度，不是简单叠加屏幕滤镜
+- Adjust external display brightness with the keyboard brightness up and down keys
+- Change brightness in 5% steps
+- Show the current brightness percentage while adjusting
+- Run as a persistent macOS menu bar app without occupying the Dock
+- Use a system sun icon in the menu bar
+- View the current brightness from the menu bar
+- Adjust brightness manually with a slider in the menu
+- Quit quickly from the menu
+- Remember the last brightness value and try to restore it on the next launch
+- Reset the display connection after system or display wake to improve reliability
+- Control real hardware brightness through DDC/CI instead of applying a software dimming overlay
 
-## 使用说明
+## Usage
 
-启动拾光后，它会出现在 macOS 菜单栏中。
+After launching ShiGuang, it appears in the macOS menu bar.
 
-首次运行时，系统可能会要求授予“辅助功能”权限。这个权限用于监听键盘上的亮度按键。授权后，可以直接使用键盘亮度增加/降低按键调节外接显示器亮度。
+On first launch, macOS may ask for Accessibility permission. This permission is required to listen for the keyboard brightness keys. Once granted, you can use those keys to control the external display brightness directly.
 
-也可以点击菜单栏中的太阳图标，通过滑块手动调整亮度。
+You can also click the sun icon in the menu bar and adjust brightness manually with the slider.
 
-## 兼容性说明
+## Installation
 
-拾光目前优先面向以下场景：
+This project is currently distributed without an Apple Developer account for code signing and notarization, so macOS may warn that the app is from an unidentified developer. This is expected.
+
+Recommended installation flow:
+
+- Download the latest `.dmg` package from GitHub Releases
+- Open the `.dmg`
+- Drag `拾光.app` into the Applications folder
+- Open Applications and find `拾光`
+- If macOS blocks the first launch, hold `Control`, click the app, and choose `Open`
+
+If macOS still blocks the app:
+
+- Open System Settings
+- Go to Privacy & Security
+- Find the security notice related to `拾光` near the bottom
+- Click `Open Anyway` or the equivalent button
+
+After the app opens successfully, macOS may still request Accessibility permission. The keyboard brightness key monitoring will only work after you allow it.
+
+## Compatibility
+
+ShiGuang is currently aimed at the following setup:
 
 - Apple Silicon Mac
-- macOS 菜单栏应用
-- 外接显示器
-- 支持 DDC/CI 亮度控制的显示器
+- macOS menu bar workflow
+- External display
+- A monitor with DDC/CI brightness control support
 
-当前已知测试环境是 Mac mini M4 + Redmi G27U。其他设备理论上可能可用，但暂未验证。
+The known tested setup is Mac mini M4 plus Redmi G27U. Other devices may work in theory, but have not been verified yet.
 
-如果遇到无法调节亮度，常见原因包括：
+Common reasons why brightness control may fail:
 
-- 显示器未开启 DDC/CI
-- 显示器、转接器、扩展坞或线材不支持 DDC 通信
-- 当前 macOS 版本对底层显示器控制接口有限制
-- 使用的是内建屏幕，而不是外接显示器
+- DDC/CI is not enabled on the monitor
+- The monitor, adapter, dock, or cable does not support DDC communication
+- The current macOS version limits access to the underlying display control interface
+- You are using an internal display instead of an external monitor
 
-## 维护说明
+## Maintenance
 
-此小工具以个人使用状态而更新，主要服务于自己的日常使用场景。
+This tool is updated around personal use and is primarily built for the author's own daily workflow.
 
-## 更新日志
+## Changelog
 
-查看 [CHANGELOG.md](CHANGELOG.md)。
+See [CHANGELOG.md](CHANGELOG.md). The release notes are currently maintained in Chinese.
 
-## 构建
+## Build
 
-本项目使用 Xcode 开发。
+This project is developed with Xcode.
 
-可以通过 Xcode 打开：
+Open it in Xcode with:
 
 ```bash
 open ShiGuang.xcodeproj
 ```
 
-也可以使用命令行构建：
+Or build it from the command line:
 
 ```bash
 xcodebuild -project ShiGuang.xcodeproj -scheme ShiGuang -configuration Release build
 ```
 
-## 开源协议
+## License
 
-本项目基于 MIT License 开源。
+This project is released under the MIT License.
